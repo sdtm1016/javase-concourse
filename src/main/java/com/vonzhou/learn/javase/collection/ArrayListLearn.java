@@ -1,5 +1,7 @@
 package com.vonzhou.learn.javase.collection;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  */
 public class ArrayListLearn {
     public static void main(String[] args) {
-        test1();
+        test3();
     }
 
     /**
@@ -31,6 +33,15 @@ public class ArrayListLearn {
 
         Object[] oa = list.toArray();
         String[] sa = (String[]) oa;// ok
+    }
+
+    public static void test3(){
+        List<String> list = Lists.newArrayList();
+        list.add("hello");
+
+        List<String> sub = list.subList(0, 1);
+        sub.add(1, "hello2");
+        System.out.println();
     }
 
 
