@@ -25,6 +25,5 @@ public class FooListener {
         eventBus.register(fooListener);
 
         eventBus.post(new FooEvent("event1"));
-
     }
 }

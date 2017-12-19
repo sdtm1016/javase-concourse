@@ -1,7 +1,6 @@
-package com.vonzhou.learn.javase.cglib;
+package com.vonzhou.learn.javase.mustlib.cglib;
 
 import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.FixedValue;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.Method;
