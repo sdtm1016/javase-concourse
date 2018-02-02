@@ -7,7 +7,16 @@ import java.util.*;
  */
 public class CollectionsLearn {
     public static void main(String[] args) {
-        typeCheck();
+//        typeCheck();
+        rotate();
+    }
+
+
+    public static void rotate(){
+        List<Integer> ints = Arrays.asList(1, 2, 3,4,5,6);
+        Collections.rotate(ints, -1);
+        System.out.println(ints);
+
     }
 
     public static void typeCheck() {
