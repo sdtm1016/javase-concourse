@@ -1,8 +1,6 @@
 package com.vonzhou.learn.javase.collection;
 
 import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
