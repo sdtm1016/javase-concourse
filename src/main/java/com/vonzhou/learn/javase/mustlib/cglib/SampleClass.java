@@ -1,4 +1,4 @@
-package com.vonzhou.learn.javase.cglib;
+package com.vonzhou.learn.javase.mustlib.cglib;
 
 /**
  * @version 2017/7/21.
