@@ -18,7 +18,11 @@ import com.vonzhou.learn.javase.disruptor.producer.LogEventProducer;
 public class MultiConsumer2_2 {
     public static final int WORKER_SIZE = 4;
 
-    public static void main(String[] args) {
+    private static final int MSG_NUM = 500000;
+
+    private static final CountDownLatch countdown = new CountDownLatch(MSG_NUM);
+
+    public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
 
         // Fixed Thread Pool
@@ -29,7 +33,9 @@ public class MultiConsumer2_2 {
 
                             @Override
                             public Thread newThread(Runnable r) {
-                                return new Thread(r, prefix + "-" + counter++);
+                                Thread t = new Thread(r, prefix + "-" + counter++);
+                                t.setDaemon(true);
+                                return t;
                             }
                         }, new RejectedExecutionHandler() {
 
@@ -44,9 +50,11 @@ public class MultiConsumer2_2 {
                         });
 
         // 模拟消息发送
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < MSG_NUM; i++) {
             executor.submit(new Task(String.format("M%s", i)));
         }
+
+        countdown.await();
         System.out.println(String.format("== Total cost %s seconds ==", (System.currentTimeMillis() - start) / 1000));
 
     }
@@ -62,7 +70,8 @@ public class MultiConsumer2_2 {
         public void run() {
             try {
                 System.out.println(Thread.currentThread().getName() + " | Event : " + msg);
-                Thread.sleep(20);
+//                Thread.sleep(20);
+                countdown.countDown();
             } catch (Exception e) {
 
             }
