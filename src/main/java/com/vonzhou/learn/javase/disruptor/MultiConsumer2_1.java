@@ -2,7 +2,6 @@ package com.vonzhou.learn.javase.disruptor;
 
 import java.util.concurrent.*;
 
-import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -11,36 +10,32 @@ import com.vonzhou.learn.javase.disruptor.consumer.LogEventConsumer;
 import com.vonzhou.learn.javase.disruptor.event.LogEvent;
 import com.vonzhou.learn.javase.disruptor.factory.LogEventFactory;
 import com.vonzhou.learn.javase.disruptor.producer.LogEventProducer;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author vonzhou
  * @version 2018/9/21
  */
-public class MultiConsumer2 {
+public class MultiConsumer2_1 {
     public static final int WORKER_SIZE = 4;
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
 
-        // Fixed Thread Pool
-        ExecutorService executor = new ThreadPoolExecutor(WORKER_SIZE, WORKER_SIZE, 0L, TimeUnit.MILLISECONDS,
-                        new ArrayBlockingQueue<Runnable>(10), new ThreadFactory() {
-                            private int counter = 0;
-                            private String prefix = "DisruptorWorker";
-
-                            @Override
-                            public Thread newThread(Runnable r) {
-                                Thread t = new Thread(r, prefix + "-" + counter++);
-                                t.setDaemon(true);
-                                return t;
-                            }
-                        });
         // 环形数组的容量，必须要是2的次幂
         int bufferSize = 1024;
 
         // 构造 Disruptor
-        Disruptor<LogEvent> disruptor = new Disruptor<>(new LogEventFactory(), bufferSize, executor, ProducerType.SINGLE,
+        Disruptor<LogEvent> disruptor = new Disruptor<>(new LogEventFactory(), bufferSize, new ThreadFactory() {
+            private int counter = 0;
+            private String prefix = "DisruptorWorker";
+
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r, prefix + "-" + counter++);
+                t.setDaemon(true);
+                return t;
+            }
+        }, ProducerType.SINGLE,
                         new YieldingWaitStrategy());
 
         // 设置消费者

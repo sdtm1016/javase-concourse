@@ -13,7 +13,7 @@ import com.vonzhou.learn.javase.disruptor.producer.LogEventProducer;
  * @author vonzhou
  * @version 2018/9/21
  */
-public class MultiConsumer4 {
+public class MultiConsumer3_2 {
     public static final int WORKER_SIZE = 2;
     public static final int WORKER_SIZE_MAX = 2;
 

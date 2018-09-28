@@ -16,10 +16,9 @@ import com.vonzhou.learn.javase.disruptor.producer.LogEventProducer;
  */
 public class MultiConsumer3 {
     public static final int WORKER_SIZE = 2;
-    public static final int WORKER_SIZE_MAX = 2;
 
     public static void main(String[] args) {
-        ExecutorService executor = new ThreadPoolExecutor(WORKER_SIZE, WORKER_SIZE_MAX, 5L, TimeUnit.MILLISECONDS,
+        ExecutorService executor = new ThreadPoolExecutor(WORKER_SIZE, WORKER_SIZE, 0L, TimeUnit.MILLISECONDS,
                         new ArrayBlockingQueue<Runnable>(1000), new ThreadFactory() {
                             private int counter = 0;
                             private String prefix = "DisruptorWorker";
