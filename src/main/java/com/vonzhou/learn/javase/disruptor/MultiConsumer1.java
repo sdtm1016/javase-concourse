@@ -1,5 +1,8 @@
 package com.vonzhou.learn.javase.disruptor;
 
+import java.util.concurrent.ThreadFactory;
+
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -8,13 +11,13 @@ import com.vonzhou.learn.javase.disruptor.event.LogEvent;
 import com.vonzhou.learn.javase.disruptor.factory.LogEventFactory;
 import com.vonzhou.learn.javase.disruptor.producer.LogEventProducer;
 
-import java.util.concurrent.ThreadFactory;
-
 /**
  * @author vonzhou
  * @version 2018/9/21
  */
-public class LogEventMain {
+public class MultiConsumer1 {
+    public static final int WORKER_SIZE = 4;
+
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
 
@@ -35,7 +38,11 @@ public class LogEventMain {
         }, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         // 设置消费者
-        disruptor.handleEventsWith(new LogEventConsumer());
+        EventHandler<LogEvent>[] consumers = new LogEventConsumer[WORKER_SIZE];
+        for (int i = 0; i < consumers.length; i++) {
+            consumers[i] = new LogEventConsumer();
+        }
+        disruptor.handleEventsWith(consumers);
 
         // 启动 Disruptor
         disruptor.start();
@@ -48,5 +55,6 @@ public class LogEventMain {
             producer.onData(String.format("M%s", i));
         }
         System.out.println(String.format("== Total cost %s seconds ==", (System.currentTimeMillis() - start) / 1000));
+
     }
 }
